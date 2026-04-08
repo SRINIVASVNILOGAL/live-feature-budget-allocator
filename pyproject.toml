@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "live-feature-budget-allocator"
+version = "1.0.0"
+description = "RL Environment for AI Product Decision Making"
+requires-python = ">=3.10"
+
+[tool.openenv]
+name = "live-feature-budget-allocator"
+version = "1.0.0"
+tasks = ["easy", "medium", "hard"]
