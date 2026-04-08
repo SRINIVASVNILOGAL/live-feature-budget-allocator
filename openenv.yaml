@@ -1,0 +1,138 @@
+# openenv.yaml
+# Official registration form for OpenEnv
+# Judges validate this file automatically
+
+name: live-feature-budget-allocator
+version: "1.0.0"
+description: >
+  An RL environment where an AI agent learns to allocate
+  a fixed daily budget across AI product features
+  (chat, autocomplete, agent) to maximize user retention
+  while minimizing cost overruns.
+
+author: your-huggingface-username
+
+# ─────────────────────────────────────────
+# ENVIRONMENT DETAILS
+# ─────────────────────────────────────────
+
+environment:
+  type: budget-allocation
+  language: python
+  framework: fastapi
+
+# ─────────────────────────────────────────
+# API ENDPOINTS
+# ─────────────────────────────────────────
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+  health: /
+
+# ─────────────────────────────────────────
+# ACTION SPACE
+# ─────────────────────────────────────────
+
+action_space:
+  type: discrete
+  size: 4
+  actions:
+    - id: 0
+      description: "Allocate more budget to Feature 0 (Chat)"
+    - id: 1
+      description: "Allocate more budget to Feature 1 (Autocomplete)"
+    - id: 2
+      description: "Allocate more budget to Feature 2 (AI Agent)"
+    - id: 3
+      description: "Cut budget from worst performing feature"
+
+# ─────────────────────────────────────────
+# OBSERVATION SPACE
+# ─────────────────────────────────────────
+
+observation_space:
+  fields:
+    - name: features
+      type: list
+      description: "List of AI product features with cost, success, retention, usage"
+    - name: budget_remaining
+      type: float
+      description: "Remaining daily budget in dollars"
+    - name: step
+      type: int
+      description: "Current step number in episode"
+    - name: done
+      type: bool
+      description: "Whether episode has ended"
+    - name: reward
+      type: float
+      description: "Reward from last action (0.0 to 1.0)"
+
+# ─────────────────────────────────────────
+# REWARD
+# ─────────────────────────────────────────
+
+reward:
+  min: 0.0
+  max: 1.0
+  formula: "0.6 * retention + 0.3 * budget_efficiency + 0.1 * success_rate"
+
+# ─────────────────────────────────────────
+# TASKS
+# ─────────────────────────────────────────
+
+tasks:
+  - name: easy
+    description: "2 features, stable environment, 5 steps, budget $1000"
+    max_steps: 5
+    starting_budget: 1000.0
+    features: ["chat", "autocomplete"]
+
+  - name: medium
+    description: "3 features, slight drift, 8 steps, budget $800"
+    max_steps: 8
+    starting_budget: 800.0
+    features: ["chat", "autocomplete", "agent"]
+
+  - name: hard
+    description: "3 features, dynamic changes, spike events, 10 steps, shrinking budget"
+    max_steps: 10
+    starting_budget: 1000.0
+    features: ["chat", "autocomplete", "agent"]
+
+# ─────────────────────────────────────────
+# INFRASTRUCTURE
+# ─────────────────────────────────────────
+
+infrastructure:
+  port: 7860
+  dockerfile: Dockerfile
+  inference_script: inference.py
+  max_runtime_minutes: 20
+  max_memory_gb: 8
+  max_vcpu: 2
+
+# ─────────────────────────────────────────
+# ENVIRONMENT VARIABLES REQUIRED
+# ─────────────────────────────────────────
+
+environment_variables:
+  - name: API_BASE_URL
+    description: "API endpoint for the LLM"
+    required: true
+  - name: MODEL_NAME
+    description: "Model identifier for inference"
+    required: true
+  - name: HF_TOKEN
+    description: "Hugging Face API key"
+    required: true
+  - name: SERVER_URL
+    description: "URL of the running environment server"
+    required: false
+    default: "http://127.0.0.1:7860"
+  - name: TASK
+    description: "Task difficulty: easy, medium, or hard"
+    required: false
+    default: "easy"
