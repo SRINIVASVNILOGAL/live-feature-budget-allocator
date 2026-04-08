@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "env.app:app"
+server = "server.app:main"
 
 [tool.openenv]
 name = "live-feature-budget-allocator"
