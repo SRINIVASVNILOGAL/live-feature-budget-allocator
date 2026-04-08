@@ -1,6 +1,6 @@
 ---
 title: Live Feature Budget Allocator
-emoji: rocket
+emoji: 🚀
 colorFrom: blue
 colorTo: green
 sdk: docker
