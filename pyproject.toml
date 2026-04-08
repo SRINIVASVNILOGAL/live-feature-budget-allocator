@@ -7,6 +7,17 @@ name = "live-feature-budget-allocator"
 version = "1.0.0"
 description = "RL Environment for AI Product Decision Making"
 requires-python = ">=3.10"
+dependencies = [
+    "openenv-core>=0.2.0",
+    "fastapi",
+    "uvicorn",
+    "requests",
+    "pydantic",
+    "openai"
+]
+
+[project.scripts]
+server = "env.app:app"
 
 [tool.openenv]
 name = "live-feature-budget-allocator"
