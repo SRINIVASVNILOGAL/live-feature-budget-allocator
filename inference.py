@@ -16,7 +16,7 @@ from env.models import Action
 API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 MODEL_NAME   = os.getenv("MODEL_NAME",   "gpt-4o-mini")
 HF_TOKEN     = os.getenv("HF_TOKEN",     "dummy-key")
-SERVER_URL   = os.getenv("SERVER_URL",   "http://127.0.0.1:8000")
+SERVER_URL = os.getenv("SERVER_URL", "https://aimlforwolrd-live-feature-budget-allocator.hf.space")
 
 openai_client = OpenAI(
     base_url = API_BASE_URL,
